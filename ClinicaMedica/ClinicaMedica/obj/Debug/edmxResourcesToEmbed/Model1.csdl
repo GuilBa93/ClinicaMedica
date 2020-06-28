@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ClinicaMedicaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Exame">
+    <Key>
+      <PropertyRef Name="Codigo" />
+    </Key>
+    <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Codigo" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="Valor" Type="Single" />
+  </EntityType>
+  <EntityType Name="Medico">
+    <Key>
+      <PropertyRef Name="CRM" />
+    </Key>
+    <Property Name="RG" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="CPF" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Telefone" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Email" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Especializacao" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Nome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="CRM" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="fk_Paciente_CPF" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Paciente" Relationship="Self.FK_Medico_2" FromRole="Medico" ToRole="Paciente" />
+  </EntityType>
+  <EntityType Name="Paciente">
+    <Key>
+      <PropertyRef Name="CPF" />
+    </Key>
+    <Property Name="CPF" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Telefone" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Endereco" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="Nome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="RG" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Medico" Relationship="Self.FK_Medico_2" FromRole="Paciente" ToRole="Medico" />
+  </EntityType>
+  <Association Name="FK_Medico_2">
+    <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Medico" Type="Self.Medico" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Paciente">
+        <PropertyRef Name="CPF" />
+      </Principal>
+      <Dependent Role="Medico">
+        <PropertyRef Name="fk_Paciente_CPF" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ClinicaMedicaEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Exame" EntityType="Self.Exame" />
+    <EntitySet Name="Medico" EntityType="Self.Medico" />
+    <EntitySet Name="Paciente" EntityType="Self.Paciente" />
+    <AssociationSet Name="FK_Medico_2" Association="Self.FK_Medico_2">
+      <End Role="Paciente" EntitySet="Paciente" />
+      <End Role="Medico" EntitySet="Medico" />
+    </AssociationSet>
+    <EntitySet Name="Usuario" EntityType="ClinicaMedicaModel.Usuario" />
+  </EntityContainer>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Login" />
+    </Key>
+    <Property Name="Login" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Senha" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
